@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<?php
+session_start();
+if (empty ( $_SESSION["trk_num"] )) {
+	// セッション切れ画面へリダイレクト処理
+	header('Location: login.html');
+} else {
+	$trk_num = $_SESSION["trk_num"];
+}
+if (empty ( $_GET["id"] )) {
+    // リダイレクト処理
+	header('Location: login.html');
+} else {
+    $serial = $_GET["id"];
+}
+if(empty($_GET["category"])){
+    $category = "show";
+}else{
+    $category = $_GET["category"];
+}
+
+?>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+<meta name="robots" content="noindex, nofollow">
+<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../js/content_detail.js"></script>
+<link rel="stylesheet" href="../css/base.css" type="text/css" media="screen">
+<title>コンテンツ詳細</title>
+</head>
+<body>
+    <?php
+    //引かないといけないのはコンテンツ番号、遷移に必要なのが所属コード(とユーザ登録番号)
+        echo "<div id='content'>\n";
+
+        // ストアドに渡す引数を配列化
+        $arg_arr = array(
+            "content_serial_num" => $serial
+            ,"trk_num" => $trk_num
+        );
+
+        // ストアド呼び出し用のファイルをロード
+        require_once ("../php/stored.php");
+
+        // ストアドプロシージャ呼び出し
+        $result = stored("content_001",$arg_arr);
+
+        foreach ($result as $key => $val) {
+            $date = $val["KUSN_NTJ"];
+
+            switch($category){
+                case "show":
+                    echo "<p>\n";
+                    echo $val["CNTNT"];
+                    echo "</p>\n";
+                    break;
+                case "edit":
+                    echo "<textarea>\n";
+                    echo $val["CNTNT"];
+                    echo "</textarea>\n";
+                    break;
+            }
+
+            echo "<p>\n";
+            //css設定で、Deleteは遠くにやる(誤操作の抑止)
+            if($category == "edit"){
+                // キーと名称をコードマスタから取得しておく。これによりアクティブ/ノンアクティブを切り替える
+                // この部分は変更しない。ストアドを変更する必要はある(職業対応)
+                echo "<button type = 'button' value = 'save'>保存</button>";
+                echo "<button type = 'button' value = 'save_show'>保存して表示</button>";
+                echo "<button type = 'button' value = 'show'>表示</button>";
+                if($val["ATH_FLG"] || ADMN_CD < 2 || PRMSSN_CD < 2){
+                    // 作成者フラグON、または管理者権限コードがadmin以上、または権限コードが削除以上
+                    echo "<button type = 'button' value = 'delete'>削除</button>";
+                }else{
+                    // それ以外は削除不可
+                    echo "<button type = 'button' value = 'delete' disabled>削除</button>";
+                }
+            }else{
+                if($val["ATH_FLG"] || ADMN_CD < 2 || PRMSSN_CD < 3){
+                    // 作成者フラグON、または管理者権限コードがadmin以上、または権限コードが編集以上
+                    echo "<button type = 'button' value = 'edit'>編集</button>";
+                }else{
+                    // それ以外は編集不可
+                    echo "<button type = 'button' value = 'edit' disabled>編集</button>";
+                }
+                if($val["ATH_FLG"] || ADMN_CD < 2 || PRMSSN_CD < 2){
+                    // 作成者フラグON、または管理者権限コードがadmin以上、または権限コードが削除以上
+                    echo "<button type = 'button' value = 'delete'>削除</button>";
+                }else{
+                    // それ以外は削除不可
+                    echo "<button type = 'button' value = 'delete' disabled>削除</button>";
+                }
+            }
+            echo "<label>".$date."</label>";
+            echo "</p>\n";
+        }
+
+        echo "</div>\n";
+    ?>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+<meta name="robots" content="noindex, nofollow">
+<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../js/new_user.js"></script>
+<link rel="stylesheet" href="../css/base.css" type="text/css" media="screen">
+<title>新規登録</title>
+</head>
+<body>
+<form>
+    <p>ユーザー名(半角英数)：<input type="text" id="username" title="半角英数" pattern = "^[0-9A-Za-z]+$" required></p>
+    <div id="user_error"></div>
+
+    <p>ニックネーム：<input type="text" id="nickname"></p>
+    <div id="nick_error"></div>
+
+    <p>メールアドレス：<input type="text" id="mail"></p>
+    <div id="mail_error"></div>
+
+    <p>パスワード：<input type="password" id="password" title="パスワードは6文字以上の半角英数で入力してください" pattern="^([a-zA-Z0-9]{6,})$" required></p>
+    <div id="pass_error"></div>
+
+    <p>パスワード確認：<input type="password" id="password_check" required></p>
+    <div id="pass_check_error"></div>
+
+    <button type="button" value="login" id="make">登録</button>
+    <button type="button" value="login" id="back">戻る</button>
+</form>
+</body>
+</html>

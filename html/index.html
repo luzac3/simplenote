@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<?php
+session_start();
+if(empty($_SESSION["trk_num"])){
+    // 登録番号がなければログインページに飛ばす
+    header("Location: login.html");
+}else{
+    // ユーザーがおらずカテゴリから上も作っていないため、titleにリダイレクトする
+    header("Location: title.html?shzk_cd=0000000");
+}
+?>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+<meta name="robots" content="noindex, nofollow">
+<script type="text/javascript" src="../js//jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../js/login.js"></script>
+<link rel="stylesheet" href="../css/base.css" type="text/css" media="screen">
+<title>トップページ</title>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<?php
+session_start();
+if (empty ( $_SESSION["trk_num"] )) {
+    // リダイレクト処理
+    header("Location: login.html");
+} else {
+    $trk_num = $_SESSION["trk_num"];
+
+}if (empty ( $_GET["shzk_cd"] )) {
+    // リダイレクト処理
+    header("Location: login.html");
+} else {
+    $shzk_cd = $_GET["shzk_cd"];
+}
+
+if (empty ( $_GET["page_num"] )) {
+   $page_num = 1;
+} else {
+   $page_num = $_GET["page_num"];
+}
+?>
+<meta charset="UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+<meta name="robots" content="noindex, nofollow">
+<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../js/title.js"></script>
+<link rel="stylesheet" href="../css/base.css" type="text/css" media="screen">
+<title>タイトル一覧</title>
+</head>
+<body>
+<div>
+	<button id = "new" type = "button" value = "new">新規作成</button>
+</div>
+
+<?php
+
+$record_num = ($page_num - 1) * 20;
+
+// ストアドに送るデータの配列化
+$arg_arr = array(
+    "trk_num" => $trk_num
+    ,"shzk_cd" => $shzk_cd
+);
+
+require_once ("../php/stored.php");
+
+// ストアドプロシージャ呼び出し
+$result = stored("title_001",$arg_arr);
+
+print_r($result);
+
+$content_num = $result[0]["COUNT"];
+
+if(!$content_num){
+    return;
+}
+
+echo "<div>\n";
+echo "<button id = 'new' class = '".$trk_num."_".$content_num."'type = 'button' value = 'new'>新規作成</button>\n";
+echo "</div>\n";
+
+echo "<div id='contents' class = ".$page_num.">\n";
+
+// データを初期化してストアドに送るデータの作成
+$arg_arr = null;
+$result = null;
+
+$arg_arr = array(
+    "trk_num" => $trk_num
+    ,"shzk_cd" => $shzk_cd
+    ,"limit" => "20"
+    ,"offset" => $record_num
+);
+
+// ストアドプロシージャ呼び出し
+$result = stored("title_002",$arg_arr);
+
+print_r($result);
+
+foreach ($result as $key => $val) {
+    if(!$val["PBLSH_FLG"]){
+        // 公開フラグがOFF
+        // 公開フラグは権限によって変化するが、制御はストアドで行う
+    	continue;
+    }
+    echo "<div id = 'show'>";
+    if($val["ATH_FLG"] || $val["ADMN_CD"] < 2 || $val["PRMSSN_CD"] < 4){
+        // 作成者フラグON、または管理者権限コードがadmin以上、または権限コードが閲覧以上
+        echo "<p><a href = 'javascript:void(0)' class='".$val["TTL_SRAL_NUM"]."'>".$val["TTL_NUM"]." ".$val["TITLE"]."</a></p>\n";
+    }else{
+        // それ以外は閲覧不可
+        echo "<p><span href = 'javascript:void(0)' class='".$val["TTL_SRAL_NUM"]."'>".$val["TTL_NUM"]." ".$val["TITLE"]."</span></p>\n";
+    }
+    echo "<p>".$val["KUSN_NTJ"]."</p>\n";
+    echo "</div>";
+
+    echo "<p id='menu'>\n";
+    if($val["ATH_FLG"] || $val["ADMN_CD"] < 2 || $val["PRMSSN_CD"] < 2){
+        // 作成者フラグON、または管理者権限コードがadmin以上、または権限コードが削除以上
+        echo "<a href = 'javascript:void(0)' class='edit ".$val["TTL_SRAL_NUM"]."'>編集</a>";
+        echo "<a href = 'javascript:void(0)' class='delete ".$val["TTL_SRAL_NUM"]."'>削除</a>\n";
+    }else if($val["ATH_FLG"] || $val["ADMN_CD"] < 2 || $val["PRMSSN_CD"] < 3){
+        // 作成者フラグON、または管理者権限コードがadmin以上、または権限コードが編集以上
+        echo "<a href = 'javascript:void(0)' class='edit ".$val["TTL_SRAL_NUM"]."'>編集</a>";
+        echo "<span class='delete ".$val["TTL_SRAL_NUM"]."'>削除</span>\n";
+    }else{
+        // それ以外は閲覧不可
+        echo "<span class='edit ".$val["TTL_SRAL_NUM"]."'>編集</span>";
+        echo "<span class='delete ".$val["TTL_SRAL_NUM"]."'>削除</span>\n";
+    }
+    echo "</p>\n";
+}
+
+echo "</div>\n";
+?>
+
+</body>
+</html>

@@ -1,19 +1,40 @@
 $(document).ready(function(){
     // コンテンツをクリック
-    $("#content_list a").on("click",function(){
+    $("button").on("click",function(){
         // コンテンツ内番号を取得
-        let serial = $(this).prop("id");
-
-        let layer = location.href.split("/");
-        let layer2 = layer[layer.length - 1];
+        let kind = $(this).val();
 
         let url = location.href;
 
-        // コンテンツ詳細ページ
-        url = url.replace(layer2,"content_detail.html");
+        switch(kind){
+            case "edit":
+              url = url + "&category="+kind;
+              location.href = url;
+              break;
+            case "save":
+              // 編集したコンテンツを取得
+              let content = $("#content textarea").val();
 
-        // コンテンツの詳細ページに遷移
-        location.href = url + "?id=" + serial;
+              let trk_num = $("#content").prop("class");
+
+              let arg_arr = {
+                  cntnt_serial_num:serial
+                  ,trk_num:trk_num
+                  ,content:content
+              }
+              call_stored("content_edit_001",arg_arr).then(
+                  function(data){
+                      // 成功
+                      if(data){
+                          console.log("作成完了");
+                          // リロード
+                          location.reload();
+                      }
+                  },function(error){
+                      console.log(error);
+                  }
+              );
+        }
     });
 
 	// 投稿をクリック

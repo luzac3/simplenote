@@ -1,37 +1,29 @@
 $(document).ready(function(){
 	// 新規作成をクリック
     $("#new").on("click",function(){
-        let url = location.href;
+        let trk_num = $("#new_title").prop("class").split(" ")[0];
+        let shzk_cd = $("#new_title").prop("class").split(" ")[1];
+        // タイトル名
+        let title = $("#new_title input").val();
 
-        let layer = location.href.split("/");
-        let layer2 = layer[layer.length - 1];
-
-        url = url.replace(layer2,"content.html");
-
-        // 新規作成ボタンに紐づくコード値を取得
-        let cd = $(this).prop("class").split("_");
-
-        // 所属コード
-        let shzk_cd = cd[0];
-        // コンテンツ番号
-        let content_num = cd[1];
-
-        // 所属コードを文字列化
-        shzk_cd = shzk_cd.toString(10);
-
-        if(parseInt(++content_num,10) < 10){
-            // コンテンツ通番が10より小さい場合は0をつけたうえで文字列化
-            content_num = "0" + content_num.toString(10);
-        }else{
-            // それ以外の場合はそのまま文字列化
-            content_num = content_num.toString(10);
+        let arg_arr = {
+            trk_num:trk_num
+            ,shzk_cd:shzk_cd
+            ,title:title
         }
 
-        (function(){
-            // コンテンツ新規作成用の即時関数
-        })
-        //Ajaxで新規作成した後、コールバックでIDを取得して編集に飛ばす
-        location.href = url + "?id=" + id + "&category=edit";
+        call_stored("new_title_001",arg_arr).then(
+            function(data){
+                // 成功
+                if(data){
+                    console.log("作成完了");
+                    // リロード
+                    location.reload();
+                }
+            },function(error){
+                console.log(error);
+            }
+        );
     });
 
     // コンテンツをクリック

@@ -18,9 +18,10 @@ if(!empty($_POST)){
     // ストアドプロシージャ呼び出し
     $result = stored($stored, $arg_arr);
 
-    if(!$result){
+    if($result){
         // 0以外は失敗
-        echo json_encode("通信失敗");
+        echo json_encode($result);
+        // echo json_encode("通信失敗");
     }else{
         echo 0;
     }
@@ -29,3 +30,5 @@ if(!empty($_POST)){
 }
 
 ?>
+call title_002("0001","0000000","","",@exit_cd);
+SELECT @query_text;

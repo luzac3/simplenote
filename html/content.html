@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 if (empty ( $_SESSION["trk_num"] )) {
@@ -15,8 +13,10 @@ if(empty($_GET["id"])){
     // タイトル通番
     $serial_num = $_GET["id"];
 }
-
 ?>
+<!DOCTYPE html>
+<html>
+
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="content-style-type" content="text/css">

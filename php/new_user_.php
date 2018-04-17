@@ -7,7 +7,6 @@
 	// ストアドプロシージャ実行関数読み込み
 	require_once ("../php/stored.php");
 
-
 	$str  = array_merge(range('a', 'z'), range('0', '9'), range('A', 'Z'),array(".","/"));
 
 	$salt = "$2y$10$";

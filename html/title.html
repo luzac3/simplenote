@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
 <?php
 session_start();
 if (empty ( $_SESSION["trk_num"] )) {
@@ -22,16 +19,25 @@ if (empty ( $_GET["page_num"] )) {
    $page_num = $_GET["page_num"];
 }
 ?>
+<!DOCTYPE html>
+<html>
+<head>
 <meta charset="UTF-8">
 <meta http-equiv="content-style-type" content="text/css">
 <meta name="robots" content="noindex, nofollow">
 <script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="../js/title.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
 <link rel="stylesheet" href="../css/base.css" type="text/css" media="screen">
 <title>タイトル一覧</title>
 </head>
 <body>
-<div>
+<?php
+echo "<div id = 'new_title' class = '".$trk_num." ".$shzk_cd."'>";
+?>
+    <form>
+        <input type = "text">
+    </form>
 	<button id = "new" type = "button" value = "new">新規作成</button>
 </div>
 
@@ -49,8 +55,6 @@ require_once ("../php/stored.php");
 
 // ストアドプロシージャ呼び出し
 $result = stored("title_001",$arg_arr);
-
-print_r($result);
 
 $content_num = $result[0]["COUNT"];
 

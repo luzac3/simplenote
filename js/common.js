@@ -6,13 +6,13 @@ function call_stored(stored_name,arg_arr){
     }
     console.log(this.arg_arr);
 
-    return new Promise(function(resolv, reject){
+    return new Promise(function(resolve, reject){
         $.ajax({
             url: "../php/js_stored.php",
             cache: false,
             timeout: 10000,
             type:'POST',
-            // dataType: 'json',
+            dataType: 'json',
             data:{
                 stored_name:stored_name
                 ,arg_arr:this.arg_arr
@@ -20,6 +20,9 @@ function call_stored(stored_name,arg_arr){
         }).then(
             function(data){
                 console.log(data);
+                if(data){
+                    reject(data);
+                }
                 resolve(data);
                 // return;
             },

@@ -54,10 +54,12 @@ BEGIN
                     ,NULL
                 ) AS ATH_FLG
                 -- ユーザ管理権限コードとグループ管理権限コードの小さい方
-                ,CASE
+                ,(
+                    CASE
                     WHEN IFNULL(ADMN_CD.USR_ADMN_CD,0) < IFNULL(ADMN_CD.GRP_ADMN_CD,0) THEN ADMN_CD.USR_ADMN_CD
                     WHEN IFNULL(ADMN_CD.GRP_ADMN_CD,0) < IFNULL(ADMN_CD.USR_ADMN_CD,0) THEN ADMN_CD.GRP_ADMN_CD
-                    ELSE '99' END AS ADMN_CD
+                    ELSE '99' END
+                ) AS ADMN_CD
                 -- コンテンツごとの権限コード
                 ,PRMSSN_CD.PRMSSN_CD AS PRMSSN_CD
                 ,PRMSSN_CD.PBLSH_FLG AS PBLSH_FLG

@@ -33,7 +33,7 @@ if(empty($_GET["category"])){
 <body>
     <?php
     //引かないといけないのはコンテンツ番号、遷移に必要なのが所属コード(とユーザ登録番号)
-        echo "<div id='content'>\n";
+        echo "<div id='content' class='".$trk_num."'>\n";
 
         // ストアドに渡す引数を配列化
         $arg_arr = array(

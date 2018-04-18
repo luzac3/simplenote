@@ -62,10 +62,6 @@ if(!$content_num){
     return;
 }
 
-echo "<div>\n";
-echo "<button id = 'new' class = '".$trk_num."_".$content_num."'type = 'button' value = 'new'>新規作成</button>\n";
-echo "</div>\n";
-
 echo "<div id='contents' class = ".$page_num.">\n";
 
 // データを初期化してストアドに送るデータの作成
@@ -82,7 +78,7 @@ $arg_arr = array(
 // ストアドプロシージャ呼び出し
 $result = stored("title_002",$arg_arr);
 
-print_r($result);
+// print_r($result);
 
 foreach ($result as $key => $val) {
     if(!$val["PBLSH_FLG"]){

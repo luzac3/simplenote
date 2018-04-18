@@ -15,7 +15,9 @@ $(document).ready(function(){
               // 編集したコンテンツを取得
               let content = $("#content textarea").val();
 
-              let trk_num = $("#content").prop("class");
+              let serial = $("#content").prop("class").split(" ")[0];
+
+              let trk_num = $("#content").prop("class").split(" ")[1];
 
               let arg_arr = {
                   cntnt_serial_num:serial
@@ -25,11 +27,9 @@ $(document).ready(function(){
               call_stored("content_edit_001",arg_arr).then(
                   function(data){
                       // 成功
-                      if(data){
-                          console.log("作成完了");
-                          // リロード
-                          location.reload();
-                      }
+                      console.log("作成完了");
+                      // リロード
+                      location.reload();
                   },function(error){
                       console.log(error);
                   }

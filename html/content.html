@@ -35,10 +35,6 @@ if(empty($_GET["id"])){
         // ストアドに渡す引数を配列化
         $arg_arr = array(
             "serial_num" => $serial_num
-            ,"trk_num" => $trk_num
-            ,"limit" => ""
-            ,"offset" => ""
-            ,"sort" => ""
         );
 
         // ストアド呼び出し用のファイルをロード
@@ -47,10 +43,22 @@ if(empty($_GET["id"])){
         // ストアドプロシージャ呼び出し
         $result = stored("content_list_001",$arg_arr);
 
-        if($result == 99){
-            // 0以外はエラー
-            echo "<p>SQL実行に失敗しました。管理者に問い合わせてください</p>";
-        }else{
+        $count =  $result[0]["COUNT"];
+
+        $result = null;
+        $arg_arr = null;
+
+        // ストアドに渡す引数を配列化
+        $arg_arr = array(
+            "serial_num" => $serial_num
+            ,"trk_num" => $trk_num
+            ,"limit" => ""
+            ,"offset" => ""
+            ,"sort" => ""
+        );
+
+        if($count){
+        	$result = stored("content_list_002",$arg_arr);
             $num = 0;
             // 結果の配列を表示
             foreach ($result as $key => $val) {

@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 if (empty ( $_SESSION["trk_num"] )) {
@@ -21,19 +19,22 @@ if(empty($_GET["category"])){
 }
 
 ?>
+<!DOCTYPE html>
+<html>
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="content-style-type" content="text/css">
 <meta name="robots" content="noindex, nofollow">
 <script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="../js/content_detail.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
 <link rel="stylesheet" href="../css/base.css" type="text/css" media="screen">
 <title>コンテンツ詳細</title>
 </head>
 <body>
     <?php
     //引かないといけないのはコンテンツ番号、遷移に必要なのが所属コード(とユーザ登録番号)
-        echo "<div id='content' class='".$trk_num."'>\n";
+        echo "<div id='content' class='".$serial." ".$trk_num."'>\n";
 
         // ストアドに渡す引数を配列化
         $arg_arr = array(

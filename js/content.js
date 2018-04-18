@@ -37,11 +37,9 @@ $(document).ready(function(){
         call_stored("new_content_001",arg_arr).then(
             function(data){
                 // 成功
-                if(data){
-                    console.log("作成完了");
-                    // リロード
-                    location.reload();
-                }
+                console.log("作成完了");
+                // リロード
+                location.reload();
             },function(error){
                 console.log(error);
             }

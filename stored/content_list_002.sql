@@ -1,35 +1,37 @@
-DROP PROCEDURE IF EXISTS title_002;
+DROP PROCEDURE IF EXISTS content_list_002;
 DELIMITER //
 -- ********************************************************************************************
--- title_002 タイトル数取得処理
+-- content_list_002 コンテンツリスト取得処理
 --
 -- 【処理概要】
---   ユーザに紐づくタイトル一覧を呼び出す
+--   タイトル連番を受け取り、紐づくコンテンツリストを取得する
 --
 --
 -- 【呼び出し元画面】
 --   インデックス
 --
 -- 【引数】
---   _trk_num           ：ユーザCD(登録番号)
---   _shzk_cd           ：種別CD
+--   _title_serial_num  ：タイトル連番
+--   _trk_num           ：ユーザ登録番号
 --   _limit             ：表示数
 --   _offset            ：ページ番号
+--   _sort              ：ソート条件
 --
 --
 -- 【戻り値】
---      exit_cd         : exit_cd
+--       exit_cd          : exit_cd
 --      正常：0
 --      異常：99
 -- --------------------------------------------------------------------------------------------
 -- 【更新履歴】
 
 -- ********************************************************************************************
-CREATE PROCEDURE `title_002`(
-    IN `_trk_num` CHAR(4)
-    , IN `_shzk_cd` CHAR(7)
+CREATE PROCEDURE `content_list_002`(
+    IN `_title_serial_num` CHAR(10)
+    , IN `_trk_num` VARCHAR(4)
     , IN `_limit` VARCHAR(3)
     , IN `_offset` VARCHAR(2)
+    , IN `_sort` VARCHAR(40)
     , OUT `exit_cd` INTEGER
 )
 COMMENT 'タイトル数取得処理'
@@ -41,12 +43,11 @@ BEGIN
 
         SET @query = CONCAT("
             SELECT
-                TTM.TTL_SRAL_NUM
-                ,TTM.SHZK_CD
-                ,TTM.TRK_NUM
-                ,TTM.TITLE
-                ,TTM.TTL_NUM
-                ,TTM.KUSN_NTJ
+                TC.CNTNT_SRAL_NUM
+                ,TC.CNTNT_NUM
+                ,TC.CNTNT
+                ,TC.LAST_KUSN_SH_TRK_NUM
+                ,TC.KUSN_NTJ
                 -- 作成者コード
                 ,IF(
                     TC.TRK_NUM = '",_trk_num,"'
@@ -58,11 +59,10 @@ BEGIN
                     CASE
                     WHEN IFNULL(ADMN_CD.USR_ADMN_CD,0) < IFNULL(ADMN_CD.GRP_ADMN_CD,0) THEN ADMN_CD.USR_ADMN_CD
                     WHEN IFNULL(ADMN_CD.GRP_ADMN_CD,0) < IFNULL(ADMN_CD.USR_ADMN_CD,0) THEN ADMN_CD.GRP_ADMN_CD
-                    ELSE '99' END
+                    ELSE NULL END
                 ) AS ADMN_CD
                 -- コンテンツごとの権限コード
                 ,PRMSSN_CD.PRMSSN_CD AS PRMSSN_CD
-                ,PRMSSN_CD.PBLSH_FLG AS PBLSH_FLG
             FROM
                 (
                     SELECT
@@ -80,20 +80,18 @@ BEGIN
                         TUM.ADMN_CD
                 ) AS ADMN_CD
                 ,(
-                    SELECT
-                        MIN(TTPM.PRMSSN_CD) AS PRMSSN_CD
-                        ,MAX(TTPM.PBLSH_FLG) AS PBLSH_FLG
+                    SELECT MIN(TCPM.PRMSSN_CD) AS PRMSSN_CD
                     FROM
                         T_USR_MSTR TUM
                     LEFT OUTER JOIN T_GRP TG
                         ON TG.USR_TRK_NUM = TUM.TRK_NUM
                     LEFT OUTER JOIN T_GRP_MSTR TGM
                         ON TGM.GRP_TRK_NUM = TG.GRP_TRK_NUM
-                    LEFT OUTER JOIN T_TTL_PRMSSN_MSTR TTPM
+                    LEFT OUTER JOIN T_CNTNT_PRMSSN_MSTR TCPM
                         ON (
-                                TGM.GRP_TRK_NUM = TTPM.GU_TRK_NUM
+                                TGM.GRP_TRK_NUM = TCPM.GU_TRK_NUM
                             OR
-                                TUM.TRK_NUM = TTPM.GU_TRK_NUM
+                                TUM.TRK_NUM = TCPM.GU_TRK_NUM
                         )
                     WHERE TUM.TRK_NUM = '",_trk_num,"'
                 ) AS PRMSSN_CD
@@ -102,13 +100,18 @@ BEGIN
                     ON TTM.SHZK_CD = TC.SHZK_CD
                     AND TTM.TRK_NUM = TC.TRK_NUM
             WHERE
-                TTM.TRK_NUM = '",_trk_num ,"'
-            AND
-                TTM.SHZK_CD = '",_shzk_cd ,"'
+                TTM.TTL_SRAL_NUM = '",_title_serial_num ,"'
         ")
         ;
 
-        SET @query_order = " ORDER BY TTL_NUM ASC";
+        -- ソート
+        SET @query_order = " ";
+
+        IF IFNULL(_sort, '') != '' THEN
+            SET @query_order = CONCAT(@query_order,_sort);
+        ELSE
+            SET @query_order = CONCAT(@query_order,"ORDER BY TC.CNTNT_NUM ASC");
+        END IF;
 
         -- 表示数
         IF IFNULL(_limit, '') != '' THEN

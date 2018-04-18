@@ -20,8 +20,8 @@ if(!empty($_POST)){
 
     if($result){
         // 0以外は失敗
-        echo json_encode($result);
-        // echo json_encode("通信失敗");
+        echo json_encode($result["exit_cd"]);
+        // echo json_encode("更新成功");
     }else{
         echo 0;
     }
@@ -30,5 +30,3 @@ if(!empty($_POST)){
 }
 
 ?>
-call title_002("0001","0000000","","",@exit_cd);
-SELECT @query_text;

@@ -32,14 +32,14 @@ function stored($stored_cd,$arr_arg = null){
         call_user_func_array(array($stmt, 'bind_param'), $param);
 
         if($stmt->execute()){
-
+/*
             $result = $mysqli -> query("SELECT @query_text AS query_text");
             // $result = $mysqli -> query("SELECT @exit_cd AS exit_cd");
             while ($row = $result->fetch_assoc()) {
             	$data_array [] = $row;
             }
             return $data_array;
-
+*/
             if($result = $mysqli -> query("SELECT @exit_cd AS exit_cd")){
                 while ($row = $result->fetch_assoc()) {
                     $data_array [] = $row;

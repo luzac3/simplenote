@@ -1,7 +1,7 @@
 DROP PROCEDURE IF EXISTS new_content_001;
 DELIMITER //
 -- ********************************************************************************************
--- edit_content_001 コンテンツ新規登録処理
+-- new_content_001 コンテンツ新規登録処理
 --
 -- 【処理概要】
 --   コンテンツ内容を新規登録する
@@ -40,10 +40,16 @@ COMMENT 'コンテンツ新規登録処理'
 
 BEGIN
 
+    DECLARE in_sral_num CHAR(10);
+
     -- 異常終了ハンドラ
     DECLARE EXIT HANDLER FOR SQLEXCEPTION SET exit_cd = 99;
 
-    SET @test = "test";
+    SELECT
+        IF(COUNT(1) = 0, '0000000000', LPAD( CAST( (MAX( CAST(CNTNT_SRAL_NUM AS UNSIGNED) ) + 1) AS CHAR ),10,'0') ) INTO in_sral_num
+    FROM
+        T_CNTNT
+    ;
 
         SET @query = CONCAT("
             INSERT INTO T_CNTNT
@@ -62,7 +68,7 @@ BEGIN
                 ,KUSN_NTJ
                 )
             SELECT
-                CNTNT_SRAL_NUM_TBL.CNTNT_SRAL_NUM AS CNTNT_SRAL_NUM
+                '",in_sral_num,"'
                ,'",_title_serial_num,"'
                 ,TTM_TBL.SHZK_CD
                 ,'",_trk_num,"'
@@ -75,13 +81,7 @@ BEGIN
                 ,now()
                 ,now()
             FROM
-               (
-                   SELECT
-                       IF(COUNT(1) = 0, '0000000000', LPAD( CAST( (MAX( CAST(CNTNT_SRAL_NUM AS UNSIGNED) ) + 1) AS CHAR ),10,'0') ) AS CNTNT_SRAL_NUM
-                   FROM
-                       T_CNTNT
-               ) CNTNT_SRAL_NUM_TBL
-               ,(
+                (
                     SELECT
                         SHZK_CD
                     FROM
@@ -130,13 +130,38 @@ BEGIN
            SET @query_rep = CONCAT(@query_rep,"REP_NO2 = '",_rep_no2 ,"'");
        END IF;
 
-       SET @query_text = CONCAT(@query,@query_rep,@query2,@query_rep,@query3);
+       SET @query_text = CONCAT(@query,@query_rep,@query2,@query_rep,@query3,";");
 
     -- 実行
     PREPARE main_query FROM @query_text;
     EXECUTE main_query;
     DEALLOCATE PREPARE main_query;
 
+    SET @query_prmssn = CONCAT("
+        INSERT INTO
+                T_CNTNT_PRMSSN_MSTR
+                (
+                    CNTNT_SRAL_NUM
+                    ,GU_TRK_NUM
+                    ,PRMSSN_CD
+                    ,PBLSH_FLG
+                    ,TURK_NTJ
+                    ,KUSN_NTJ
+                )
+            SELECT
+                '",in_sral_num,"'
+                ,'",_trk_num,"'
+                ,'0'
+                ,'1'
+                ,NOW()
+                ,NOW()
+        ;
+    ")
+    ;
+    -- 実行
+    PREPARE main_query FROM @query_prmssn;
+    EXECUTE main_query;
+    DEALLOCATE PREPARE main_query;
     SET exit_cd = 0;
 
 END

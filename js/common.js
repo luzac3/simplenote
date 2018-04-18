@@ -20,10 +20,14 @@ function call_stored(stored_name,arg_arr){
         }).then(
             function(data){
                 console.log(data);
-                if(data){
-                    reject(data);
+                let ret = parseInt(data);
+
+                console.log(ret);
+
+                if(ret){
+                    reject(ret);
                 }
-                resolve(data);
+                resolve(ret);
                 // return;
             },
             function(XMLHttpRequest, textStatus, errorThrown){

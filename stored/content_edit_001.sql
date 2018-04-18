@@ -27,7 +27,7 @@ DELIMITER //
 CREATE PROCEDURE `content_edit_001`(
     IN `_content_serial_num` CHAR(10)
     , IN `_trk_num` CHAR(4)
-    , IN `_cntnt` CHAR(10)
+    , IN `_cntnt` VARCHAR(2500)
     , OUT `exit_cd` INTEGER
 )
 COMMENT 'コンテンツ取得処理'
@@ -41,8 +41,8 @@ BEGIN
             UPDATE
                 T_CNTNT
             SET
-                CNTNT = "',_cntnt,'"
-                ,LAST_KUSN_SH_TRK_NUM = "',_trk_num,'"
+                CNTNT = '",_cntnt,"'
+                ,LAST_KUSN_SH_TRK_NUM = '",_trk_num,"'
                 ,KUSN_NTJ = NOW()
             WHERE
                 CNTNT_SRAL_NUM = '",_content_serial_num,"'

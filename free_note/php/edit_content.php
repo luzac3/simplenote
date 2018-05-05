@@ -4,7 +4,7 @@ if(!empty($_POST["new_content"])){
 	$cntnt_sral_num = $_POST["serial"];
 
 	// ストアドプロシージャ実行関数読み込み
-	require_once ("../php/stored.php");
+	require_once ("../../common/php/stored.php");
 
 	// ストアドに渡す配列の作成
 	$arg_arr = array(

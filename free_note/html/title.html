@@ -2,13 +2,13 @@
 session_start();
 if (empty ( $_SESSION["trk_num"] )) {
     // リダイレクト処理
-    header("Location: login.html");
+    header("Location: ../../common/login.html");
 } else {
     $trk_num = $_SESSION["trk_num"];
 
 }if (empty ( $_GET["shzk_cd"] )) {
     // リダイレクト処理
-    header("Location: login.html");
+    header("Location: ../../common/login.html");
 } else {
     $shzk_cd = $_GET["shzk_cd"];
 }
@@ -26,10 +26,10 @@ if (empty ( $_GET["page_num"] )) {
 <meta http-equiv="content-style-type" content="text/css">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
-<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="../js/title.js"></script>
-<script type="text/javascript" src="../js/common.js"></script>
-<link rel="stylesheet" href="../css/base.css" type="text/css" media="screen">
+<script type="text/javascript" src="../../common/js/common.js"></script>
+<link rel="stylesheet" href="../../common/css/base.css" type="text/css" media="screen">
 <title>タイトル一覧</title>
 </head>
 <body>
@@ -52,7 +52,7 @@ $arg_arr = array(
     ,"shzk_cd" => $shzk_cd
 );
 
-require_once ("../php/stored.php");
+require_once ("../../common/php/stored.php");
 
 // ストアドプロシージャ呼び出し
 $result = stored("title_001",$arg_arr);

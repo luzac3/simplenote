@@ -2,13 +2,13 @@
 session_start();
 if (empty ( $_SESSION["trk_num"] )) {
     // セッション切れ画面へリダイレクト処理
-	header('Location: login.html');
+	header('Location: ../../common/login.html');
 } else {
 	$trk_num = $_SESSION["trk_num"];
 }
 if(empty($_GET["id"])){
     // セッション切れ画面へリダイレクト処理
-	header('Location: login.html');
+	header('Location: ../../common/login.html');
 }else{
     // タイトル通番
     $serial_num = $_GET["id"];
@@ -39,7 +39,7 @@ if(empty($_GET["id"])){
         );
 
         // ストアド呼び出し用のファイルをロード
-        require_once ("../php/stored.php");
+        require_once ("../../common/php/stored.php");
 
         // ストアドプロシージャ呼び出し
         $result = stored("content_list_001",$arg_arr);

@@ -1,11 +1,8 @@
 <?php
 session_start();
 if(empty($_SESSION["trk_num"])){
-	// 登録番号がなければログインページに飛ばす
-	header("Location: login.html");
-}else{
-	// ユーザーがおらずカテゴリから上も作っていないため、titleにリダイレクトする
-	header("Location: title.html?shzk_cd=0000000");
+    // 登録番号がなければログインページに飛ばす
+    sheader("Location: login.html");
 }
 ?>
 <!DOCTYPE html>
@@ -21,5 +18,14 @@ if(empty($_SESSION["trk_num"])){
 <title>トップページ</title>
 </head>
 <body>
+<div>
+<p>メニュー</p>
+<?php
+    // echo "<a href = 'title.html?shzk_cd=".."'>スレッド</a>";
+    echo "<a href = '../../free_note/title.html?shzk_cd=0000000'>スレッド</a>";
+    echo "<a href = '../../planner/plan_make.html'>企画作成</a>";
+?>
+
+</div>
 </body>
 </html>

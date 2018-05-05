@@ -40,6 +40,7 @@ if(isset($user_info["id_str"])){
         header("Location:../html/error.html");
     }else{
         header("Location:../html/auto_tweet.html");
+    }
 }else{
     header("Location:../html/error.html");
 }

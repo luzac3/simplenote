@@ -2,13 +2,15 @@
 session_start();
 if(empty($_SESSION["trk_num"])){
     // 登録番号がなければログインページに飛ばす
-    header("Location: login.html");
+    header("Location: ../../common/html/login.html");
 }else{
     $trk_num = $_SESSION["trk_num"];
 }
 if(!empty($_GET["grp_trk_num"])){
     // 「グループ単位」で作成した場合はこちらが存在する(呼び出し元未実装)
     $grp_trk_num = $_GET["grp_trk_num"];
+}else{
+    $grp_trk_num = "no_grp";
 }
 ?>
 <!DOCTYPE html>
@@ -23,316 +25,189 @@ if(!empty($_GET["grp_trk_num"])){
 <script type="text/javascript" src="../../common/js/storager.js"></script>
 <link rel="stylesheet" href="../../common/css/base.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../common/css/table_conf.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../css/plan_make.css" type="text/css" media="screen">
 <title>企画作成</title>
 </head>
 <body>
-<?php
-    // 基本機能は未実装で、予算管理システムだけ先に実装する
-    // 登録だけはできるけど中身はカラ
-    // 最低限必要なもの？→企画通版などの作成システム(流用)、企画名、「グループとして登録」機能
-    // 参加範囲(中身は全体のみでOK)　誰でも、などのタグCDはのちに作ります
-
-?>
 
 <h1>企画登録ページ</h1>
 <img src = "../img/top.jpg">
-<div id="main">
+<?php
+    echo "<div id = 'main' class = '".$trk_num." ".$grp_trk_num."'>";
+?>
     <div id = "caution">
         <p>
             こちらは企画者用の企画登録ページです。ほとんど工事中なので登録できる部分はかなり少ない
         </p>
     </div>
 
-	<div id = "main_register">
-	<form><table>
-		<tr>
-			<td colspan="2">
-					<p class="center"><label class="bold">以下の項目は必須項目です</label></p>
-			</td>
-		</tr>
-		<tr>
-			<td class="left_pane">
-				<p>企画名<label class="red">[必須]</label></p>
-			</td>
-			<td>
-				<p>
-					<input type="text" id="JOINNER_NAME" class="c_register" required>
-					<br>
-					<label>ハンドルネーム等で登録いただくことが可能ですが、当日は年齢確認のため身分証の提示をお願いする場合がございます<br>(お名前が見えないように提示していただくことは可能です)<br>
-					Twitterアカウントをお持ちの方は、できるだけツイッターアカウントと同名を使用いただくことを推奨いたします。</label>
-				</p>
-			</td>
-		</tr>
+    <div id = "main_register">
+    <form><table>
+        <tr>
+            <td colspan="2">
+                    <p class="center"><label class="bold">以下の項目は必須項目です</label></p>
+                    <!-- 以下マスタの内容 -->
+            </td>
+        </tr>
+        <tr>
+            <td class="left_pane">
+                <p>企画名<label class="red">[必須]</label></p>
+            </td>
+            <td>
+                <p>
+                    <input type="text" id="PLN_NAME" class="c_register" required>
+                    <br>
+                    <label>企画名を入力してください</label>
+                </p>
+            </td>
+        </tr>
 
-		<tr>
-			<td class="left_pane">
-				<p>生年月日</p>
-			</td>
-			<td>
-				<p>
-					<?php
-						echo '<select id="birthY" class="c_register">';
-						for($i=1937; $i<=2017; $i++){
-							if($i==1989){
-								echo '<option value="'.$i.'" selected>'.$i;
-							}else{
-								echo '<option value="'.$i.'">'.$i;
-							}
-						}
-						echo '</select>';
+        <tr>
+            <td class="left_pane">
+                 <p>最少催行人数</p>
+            </td>
+            <td>
+                <p>
+                    <input type="number" id="MNMN_NMBR" class="c_register">
+                    <br>
+                    <label>最少催行人数を設定してください(未入力の場合無制限)</label>
+                </p>
+            </td>
+        </tr>
 
-						echo '<select id="birthM" class="c_register">';
-						for($i=1; $i<=12; $i++){
-							echo '<option value="'.$i.'">'.$i;
-						}
-						echo '</select>';
+        <tr>
+            <td class="left_pane">
+                 <p>定員</p>
+            </td>
+            <td>
+                <p>
+                    <input type="number" id="CPCTY" class="c_register">
+                    <br>
+                    <label>定員を設定してください(未入力の場合無制限)</label>
+                </p>
+            </td>
+        </tr>
 
-						echo '<select id="birthD" class="c_register">';
-						for($i=1; $i<=31; $i++){
-							echo '<option value="'.$i.'">'.$i;
-						}
-						echo '</select>';
-					?>
-					<br>
-					<label>身成年者飲酒防止のための年齢確認に使用し、その他の目的で使用することはございません。</label>
-				</p>
-			</td>
-		</tr>
+        <tr>
+            <td class="left_pane">
+                <p>企画内容</p>
+            </td>
+            <td  id="text_area">
+                <p>
+                    <label>企画の内容を記載ください</label>
+                    <textarea  id="PLN_CNTNT" class="c_register"></textarea>
+                </p>
+            </td>
+        </tr>
 
-		<tr>
-			<td class="left_pane">
-				<p>連絡方法選択</p>
-			</td>
-			<td>
-				<p id = "REGISTER_CODE" class="c_register">
-					<input type="radio" name ="REGISTER_CODE" value="0" checked>メール
-					<input type="radio" name ="REGISTER_CODE" value="1" disabled>ツイッター
-					<!-- <input type="radio" name ="REGISTER_CODE" value="2">友人 -->
-					<br>
-					<!-- <label>「友人」はメールアドレスを持たないか、友人の紹介により友人経由で参加したい方のためのものです。<br>基本的には選択しないでください。</label><br> -->
-					<label>特に問題がなければ、メールを選択することを推奨いたします。</label><br>
-					<label class="red">現在のところツイッターで連絡希望の方も、メールアドレスの登録が必須となっております(受付メールのため)。</label><br>
-					<label>メールアドレスを持たない、または公開したくない方は、@luza_c3に直接コンタクトをお願いいたします。主催側で登録いたします</label>
-				</p>
-			</td>
-		</tr>
 
-		<tr>
-			<td id="address_rewrite" class="left_pane">
-				<p>メールアドレス<label class="red">[必須]</label></p>
-			</td>
-			<td>
-				<p>
-					<input type="text"  id="ADDRESS" class="c_register long_form" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
-				</p>
-			</td>
-		</tr>
+        <tr id="PRT">
+            <td class="left_pane">
+                 <p>枠</p>
+            </td>
+            <td>
+            <div class="clone">
+                <p>
+                    枠名：<input type="text" class="c_register PRT_NAME"><br>
+                    時間/日程：<input type="date" class="c_register AGND_BGN">～<input type="date" class="c_register AGND_END">
+                </p>
+            </div>
+                <p>
+                    <label>企画の枠を設定できます。参加形態が分かれない場合、入力は不要です</label>
+                </p>
+                <p>
+                    <button value="add">枠追加</button><button value="del">枠削除</button>
+                </p>
+            </td>
+        </tr>
 
-		<tr>
-			<td id="address_rewrite" class="left_pane">
-				<p>Twitterアカウント</p>
-			</td>
-			<td>
-				<p>
-					<input type="text"  id="TWITTER" class="c_register long_form" pattern="^[0-9A-Za-z_]+$">
-				</p>
-			</td>
-		</tr>
+        <tr id="PRTCPTN_FEE_DEFAULT">
+        <!-- 枠を増やすとidを書き換え、参加費の文言を書き換える -->
+            <td class="left_pane">
+                 <p>参加費</p>
+            </td>
+            <td>
+                <div class="clone">
+                    <p class = "PRT_NUM">
+                        <input type = "checkbox" value="1" name = "PRTCPTN_FEE_DEFAULT" class="hidden">
+                    </p>
+                    <p>
+                        参加費目:<input type="text" class="c_register PRTCPTN_FEE">
+                        参加費:<input type="number" class="c_register PRTCPTN_FEE_KND">
+                    </p>
+                </div>
+                <p>
+                    <label>参加費を設定します</label>
+                </p>
+                <p>
+                    <button value="add">参加費追加</button><button value="del">参加費削除</button>
+                </p>
+            </td>
+        </tr>
 
-		<tr>
-			<td class="left_pane">
-				<p>アクリルスタンド申込有無</p>
-			</td>
-			<td>
-				<p>
-					<select id = "ACRYLIC_FLAG" class="c_register">
-						<option value="0" selected>申し込まない—参加費4500円
-						<option value="1">申し込む—参加費5500円
-					</select>
-					<br>
-					<label>
-						アクリルスタンドは参加者の数より少ない設定となっております。<br>
-						「アクリルスタンドを申し込む」を選択された場合で、アクリルスタンドの上限に達しており申し込みをお受けできない場合、その旨の連絡を差し上げます。<br>
-						アクリルスタンドなしで申し込みいただくか、見送るかご選択ください。<br>
-						ただし、人数が増えたことによりアクリルスタンドの上限が増えました場合、優先的にアクリルスタンドありの参加者としてお声かけさせていただきます。<br>
-						詳しくは<a href="./detail.html"  target="_blank">こちら</a>をご参照ください。
-					</label>
-				</p>
-			</td>
-		</tr>
-		<!-- ここまで必須項目 -->
+        <tr>
+            <td colspan="2">
+                <p  class="center">
+                    <label class="bold">以下の項目は自由入力項目です</label>
+                </p>
+                <p>
+                    <label>
+                        以下に自由に項目を設定することが出来ます
+                    </label>
+                </p>
+            </td>
+        </tr>
 
-		<tr>
-			<td colspan="2">
-				<p  class="center">
-					<label class="bold">以下の項目は任意入力項目です</label>
-				</p>
-				<p>
-					<label>
-						以下の項目で、「展示グッズ持込」を5個以上、「景品持込」を2個以上、「アルコール持込」を1個以上登録、のいずれかを満たした方に関しては、参加費から500円を割り引かせていただきます<br>
-						<a href = "./notes.html"  target="_blank">注意事項</a>をご理解のうえ、ぜひご協力くださいますようよろしくお願い申し上げます。<br>
-						注:3つのうちいくつを満たしても、割引は500円までとさせていただきます。ご了承ください。
-					</label>
-				</p>
-			</td>
-		</tr>
+        <tr id="PLN_ITM">
+            <td class="left_pane">
+                <p>
+                    <label>追加項目</label>
+                </p>
+            </td>
+            <td>
+                <div class="clone">
+                    <p class = "PRT_NUM">
+                        <input type = "checkbox" value="1" name = "PLN_ITM" class="hidden">
+                    </p>
+                    <p>
+                        項目名:<input type="text" class="c_register">　選択形式:
+                    <!-- 暫定　本来なら取得する項目 -->
+                        <select class="c_register">
+                            <option value = "01">ラジオボタン
+                            <option value = "02">チェックボックス
+                            <option value = "03">セレクトボックス
+                            <option value = "04">フォーム
+                            <option value = "05">テキストエリア
+                        </select>
+                    </p>
+                </div>
+                <p>
+                    <button value="add">項目追加</button>
+                    <button value="del">項目削除</button>
+                </p>
+            </td>
+        </tr>
+        </table></form>
 
-		<tr>
-			<td class="left_pane">
-				<p>展示グッズ持込</p>
-			</td>
-			<td>
-				<p id = "DISPLAY_FLAG" class="c_register">
-					<input type="radio" name ="DISPLAY_FLAG" value="0" checked>しない
-					<input type="radio" name ="DISPLAY_FLAG" value="1">する
-					<br>
-				</p>
-			</td>
-		</tr>
+        <div id="button_set">
+            <button id="register_button" value="register_button">登録</button>
+        </div>
+    </div>
 
-		<tr>
-			<td class="left_pane">
-				<p>展示グッズ持込数</p>
-			</td>
-			<td>
-				<p>
-					<select id="DISPLAY_NUM" class="c_register">
-						<option value = "0" selected>0
-						<?php
+    <div id="caution_area" class="hide"></div>
 
-							for($i = 1; $i<50; $i++){
-								echo "<option value='".$i."'>".$i;
-							}
-						?>
-					</select>
-					<label>個</label>
-				</p>
-			</td>
-		</tr>
+    <div id="baloon" class="hide"></div>
 
-		<tr>
-			<td class="left_pane">
-				<p>景品持込</p>
-			</td>
-			<td>
-				<p id = "PRISE_FLAG" class="c_register">
-					<input type="radio" name ="PRISE_FLAG" value="0" checked>しない
-					<input type="radio" name ="PRISE_FLAG" value="1">する
-					<br>
-				</p>
-			</td>
-		</tr>
-
-		<tr>
-			<td class="left_pane">
-				<p>景品持込数</p>
-			</td>
-			<td>
-				<p>
-					<select id="PRISE_NUM" class="c_register">
-						<option value = "0" selected>0
-						<?php
-
-							for($i = 1; $i<50; $i++){
-								echo "<option value='".$i."'>".$i;
-							}
-						?>
-					</select>
-					<label>個</label>
-				</p>
-			</td>
-		</tr>
-
-		<tr>
-			<td class="left_pane">
-				<p>アルコール持込</p>
-			</td>
-			<td>
-				<p id = "ALCHOL_FLAG" class="c_register">
-					<input type="radio" name ="ALCHOL_FLAG" value="0" checked>しない
-					<input type="radio" name ="ALCHOL_FLAG" value="1">する
-					<br>
-				</p>
-			</td>
-		</tr>
-
-		<tr>
-			<td class="left_pane">
-				<p>アルコール持込数</p>
-			</td>
-			<td>
-				<p>
-					<select id="ALCHOL_NUM" class="c_register">
-						<option value = "0" selected>0
-						<?php
-							for($i = 1; $i<50; $i++){
-								echo '<option value="'.$i.'">'.$i;
-							}
-						?>
-					</select>
-					<label>個</label>
-				</p>
-			</td>
-		</tr>
-
-		<tr>
-			<td class="left_pane">
-				<p>コスプレ</p>
-			</td>
-			<td>
-				<p id = "COSTUME" class="c_register">
-					<input type="radio" name ="COSTUME" value="0" checked>しない
-					<input type="radio" name ="COSTUME" value="1">する
-					<br>
-				</p>
-			</td>
-		</tr>
-
-		<tr>
-			<td class="left_pane">
-				<p>好きなフレンズ</p>
-			</td>
-			<td>
-				<p>
-					<input type="text"  id="LOVE_FRIENDS" class="c_register">
-				</p>
-			</td>
-		</tr>
-
-		<tr>
-			<td class="left_pane">
-				<p>その他</p>
-			</td>
-			<td  id="text_area">
-				<p>
-					<label>その他、主催に伝えたいことなどがありましたらご記入ください。</label>
-					<textarea  id="COMMENT" class="c_register"></textarea>
-				</p>
-			</td>
-		</tr>
-
-		</table></form>
-
-		<div id="button_set">
-			<button id="register_button" value="register_button">登録</button>
-		</div>
-	</div>
-
-	<div id="caution_area" class="hide"></div>
-
-	<div id="baloon" class="hide"></div>
-
-	<div id = "transition">
-		<a href="./index.html">トップへ戻る</a>
-	</div>
+    <div id = "transition">
+        <a href="../../common/html/index.html">トップへ戻る</a>
+    </div>
 </div>
 
 <div id ="footer">
-	<p>
-		サーバルケーキパーティは、けものフレンズの非公式イベントです。<br>
-		公式けものフレンズプロジェクトとは一切関係ございません。<br>
-		ご質問などは<a href="./QA.html">こちら</a>からお願いいたします。
-	</p>
+    <p>
+        ページ開発者:るざ狼<br>
+        ご質問などは<a href="./QA.html">こちら</a>または@luza_c3までお願いいたします。
+    </p>
 </div>
 
 </body>

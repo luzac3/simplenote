@@ -1,0 +1,47 @@
+@CHARSET "UTF-8";
+table{
+	border-collapse: collapse;
+	text-align: left;
+}
+th{
+	vertical-align: top;
+    border: 1px solid black;
+	padding: 10px 5px;
+}
+
+td{
+	vertical-align: middle;
+    border: 1px solid black;
+	padding: 0px 5px;
+}
+
+.left_pane{
+	width:30%;
+	vertical-align: middle;
+}
+@media (max-width: 479px) {
+    /*　画面サイズが480pxからはここを読み込む　*/
+    table{
+    	width:100%;
+	}
+	td{
+		vertical-align: middle;
+	    border: 1px solid black;
+		padding: 0px;
+		word-wrap: break-word;
+	}
+	input {
+		max-width:100%;
+	}
+
+}
+
+@media (min-width: 480px) and (max-width: 979px) {
+    /*　画面サイズが768pxから920pxまではここを読み込む　*/
+
+}
+
+@media (min-width: 980px) {
+
+
+}

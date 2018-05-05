@@ -1,0 +1,173 @@
+<?php
+session_start();
+if(empty($_SESSION["trk_num"])){
+    // 登録番号がなければログインページに飛ばす
+    header("Location: ../../common/html/login.html");
+}else{
+    $trk_num = $_SESSION["trk_num"];
+}
+if(empty($_GET["register"])){
+    header("Location: ../../common/html/index.html");
+}else{
+    $register_url = urldecode(urldecode($_GET["register"]));
+    $register = json_decode($register_url,true);
+
+    $register_transact_url = urldecode(urldecode($_GET["register_transact"]));
+    $register_transact = json_decode($register_transact_url,true);
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>企画登録確認画面</title>
+<meta http-equiv="content-style-type" content="text/css">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+<link rel="stylesheet" href="../../common/css/base.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../common/css/table_conf.css" type="text/css" media="screen">
+<script type="text/javascript" src="../../common/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../../common/js/javascript/storager.js"></script>
+<script type="text/javascript" src="../js/plan_confirm.js"></script>
+</head>
+<body>
+<h1>企画登録確認画面</h1>
+<img src = "../img/top.jpg">
+<div id="main">
+    <div id = "confirm">
+        <p>
+            登録内容をご確認の上、間違いがなければ、「登録」ボタンを押してください。
+        </p>
+    </div>
+
+    <div class = "main_confirm">
+    <form><table>
+        <tr>
+            <td class="left_pane">
+                <p>企画名</p>
+            </td>
+            <td>
+                <p>
+                    <?php
+                        echo $register["PLN_NAME"];
+                    ?>
+				</p>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="left_pane">
+				<p>最少催行人数</p>
+			</td>
+			<td>
+				<p>
+					<?php
+						echo $register["MNMN_NMBR"];
+					?>
+				</p>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="left_pane">
+				<p>定員</p>
+			</td>
+			<td>
+				<p>
+                    <?php
+                        echo $register["CPCTY"];
+                    ?>
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="left_pane">
+                <p>企画内容</p>
+            </td>
+            <td>
+                <p>
+                    <?php
+                        $register["PLN_CNTNT"];
+                    ?>
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="left_pane">
+                <p>枠</p>
+            </td>
+            <td>
+                <?php
+                    foreach($register_transact["PRT_NAME"] as $colmn){
+                        echo "<p>";
+                            echo "枠名：".$colmn[0];
+                            echo " ";
+                            echo "時間/日程：".$colmn[1]."～".$colmn[2];
+                        echo "</p>";
+                    }
+                ?>
+            </td>
+        </tr>
+
+		<tr>
+			<td class="left_pane">
+				<p>参加費</p>
+			</td>
+			<td>
+                <?php
+                    foreach($register_transact["PRTCPTN_FEE_DEFAULT"] as $key => $colmn){
+                        echo "<p>";
+                            echo "枠名：".$register_transact["PRT_NAME"][$key][0];
+                            echo " ";
+                            echo "参加費目：".$colmn[0];
+                            echo " ";
+                            echo "参加費：".$colmn[1];
+                        echo "</p>";
+                    }
+                ?>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="left_pane">
+				<p>展示グッズ持込</p>
+			</td>
+			<td>
+                <?php
+                    foreach($register_transact["PLN_ITM"] as $key => $colmn){
+                        echo "<p>";
+                            echo "枠名：".$register_transact["PRT_NAME"][$key][0];
+                            echo " ";
+                            echo "項目名：".$colmn[0];
+                            echo " ";
+                            echo "選択形式：".$colmn[1];
+                            // DBから引く
+                        echo "</p>";
+                    }
+                ?>
+            </td>
+        </tr>
+        </table></form>
+
+        <div id="button_set">
+            <button id="register_button" value="register_button">登録</button>
+            <button id="back_button" value="back_button">修正</button>
+        </div>
+    </div>
+
+	<div id = "transition">
+		<a href="./index.html">トップへ戻る</a>
+	</div>
+</div>
+
+<div id ="footer">
+	<p>
+		サーバルケーキパーティは、けものフレンズの非公式イベントです。<br>
+		公式けものフレンズプロジェクトとは一切関係ございません。<br>
+		ご質問などは<a href="./QA.html">こちら</a>からお願いいたします。
+	</p>
+</div>
+
+</body>

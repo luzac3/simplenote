@@ -1,0 +1,21 @@
+table{
+	width:95%;
+}
+
+.long_form{
+	width:75%;
+}
+
+.short_form{
+	width:8%;
+}
+
+textarea{
+	width:80%;
+	height:100px;
+
+}
+
+#text_area{
+	height:100%;
+}

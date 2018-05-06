@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
     //バルーン等Hide処理
     $(".hide").hide();
@@ -59,7 +58,7 @@ function fn_register(){
         });
     });
 
-    $('button').on('click','#register_button',function(){
+    $('button').on('click',function(){
         let button_val = $(this).val();
 
         // 押下したボタンをDisabledに変更
@@ -67,7 +66,7 @@ function fn_register(){
         // 5秒後にボタンを復帰する
         let kill_button = setTimeout(function(){
             $(this).prop("disabled",false);
-        },5*1000)
+        }.bind(this),3*1000)
 
         if(button_val == "register_button"){
 
@@ -141,31 +140,6 @@ function fn_register(){
                         })
                         i++;
                     }
-/*
-                    // テーブルごとに更新する内容を設定
-                    register_transact[table_name] = "";
-
-                    num = 0;
-                    // 項目数分ループ
-                    clmn_transact[key].forEach(function(val){
-                        // 番号順の配列に並べ替える
-                        register_transact[table_name][num] = {};
-
-                        // カラム数分ループ
-                        clmn_key.forEach(function(clmn){
-                            // 1番から開始のため、＋1する
-                            register_transact[table_name] += (num + 1);
-
-                            // 同じNoのカラム内容をカンマ区切りで文字列に追加
-                            register_transact[table_name] += clmn_transact[clmn][num];
-                            register_transact[table_name] += ",";
-                        });
-                        // 余分なカンマを削除
-                        register_transact[table_name] = register_transact[table_name].slice(0,-1);
-                        num++;
-                        register_transact[table_name] += ")";
-                    });
-*/
                 }
             }
 
@@ -196,15 +170,22 @@ function fn_register(){
 
                     // 枠数を持つ全てのオブジェクトを取得
                     let origin_list = $(".PRT_NUM");
-                    origin_list.forEach(function(obj){
-                        if(obj_num == 1){
+
+                    first_flag = true;
+                    Array.from(origin_list).forEach(function(obj){
+                        if(obj_num == 2 && first_flag){
                             // 最初のオブジェクトであれば、隠れたinputのhiddenを削除
-                            obj.find("input").filter(":last").removeClass("hidden");
+                            $(obj).find("input").filter(":last").removeClass("hidden");
+                            first_flag = false;
                         }
                         // 枠数を持つオブジェクトの中で、最後のinput要素を複製
-                        change_obj = obj.find("input").filter(":last").clone();
+                        change_obj = $(obj).find("input").filter(":last").clone();
+                        // 付随するラベル(枠名)も複製
+                        change_label = $(obj).find("label").filter(":last").clone();
+
                         change_obj.val(obj_num);
-                        obj.find(":last").inserAfter(change_obj);
+                        change_label.text("枠"+obj_num);
+                        $(obj).find("label").filter(":last").after(change_label).after(change_obj);
 
                         // obj.find(":last").val(obj_num);
                     })

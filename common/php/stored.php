@@ -1,6 +1,6 @@
 <?php
 function stored($stored_cd,$arr_arg = null){
-    require_once ("../php/conection.php");
+    require_once ("conection.php");
     // $mysqli = db_connect ( "free_note" );
     $mysqli = db_connect ( "wolfnet-twei_simplenote" );
 

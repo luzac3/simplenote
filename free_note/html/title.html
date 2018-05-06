@@ -2,13 +2,13 @@
 session_start();
 if (empty ( $_SESSION["trk_num"] )) {
     // リダイレクト処理
-    header("Location: ../../common/login.html");
+    header("Location: ../../html/common/login.html");
 } else {
     $trk_num = $_SESSION["trk_num"];
 
 }if (empty ( $_GET["shzk_cd"] )) {
     // リダイレクト処理
-    header("Location: ../../common/login.html");
+    header("Location: ../../html/common/login.html");
 } else {
     $shzk_cd = $_GET["shzk_cd"];
 }

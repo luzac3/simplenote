@@ -132,7 +132,7 @@ if(empty($_GET["register"])){
 
 		<tr>
 			<td class="left_pane">
-				<p>展示グッズ持込</p>
+				<p>追加項目</p>
 			</td>
 			<td>
                 <?php
@@ -142,8 +142,9 @@ if(empty($_GET["register"])){
                             echo " ";
                             echo "項目名：".$colmn[0];
                             echo " ";
-                            echo "選択形式：".$colmn[1];
-                            // DBから引く
+                            require_once ("../../common/php/code_to_stored.php");
+                            $result = code_to_stored("C_INPT_MTHD",$colmn[1]);
+                            echo "選択形式：".$result["NAME"][$key];
                         echo "</p>";
                     }
                 ?>
@@ -164,8 +165,6 @@ if(empty($_GET["register"])){
 
 <div id ="footer">
 	<p>
-		サーバルケーキパーティは、けものフレンズの非公式イベントです。<br>
-		公式けものフレンズプロジェクトとは一切関係ございません。<br>
 		ご質問などは<a href="./QA.html">こちら</a>からお願いいたします。
 	</p>
 </div>

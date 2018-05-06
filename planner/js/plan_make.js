@@ -180,8 +180,8 @@ function fn_register(){
             let confirm = JSON.stringify(register);
             let confirm_transact = JSON.stringify(register_transact);
 
-            location.href = "./register_confirm.html?register="+encodeURIComponent(encodeURIComponent(confirm))
-                                                 + "?register_transact="+encodeURIComponent(encodeURIComponent(confirm_transact));
+            location.href = "./plan_confirm.html?register="+encodeURIComponent(encodeURIComponent(confirm))
+                                             + "?register_transact="+encodeURIComponent(encodeURIComponent(confirm_transact));
         }else{
             if(button_val = "add"){
                 // クリックされた場所から、コピー用のオブジェクトを取得

@@ -1,10 +1,10 @@
 <?php
-function code_to_stored($table_name,$code_list){
+function code_to_stored($table_name,$cd_name,$code_list){
     // ストアドプロシージャ実行関数読み込み
     require_once ("../php/stored.php");
 
     $arg_arr = array(
-        "sql" => list_to_str($table_name,$code_list)
+        "sql" => list_to_str($table_name,$cd_name,$code_list)
     );
 
     $result = stored("code_to_stored_001",$arg_arr);
@@ -12,7 +12,7 @@ function code_to_stored($table_name,$code_list){
     return $result;
 }
 
-function list_to_str($table_name,$code_list) {
+function list_to_str($table_name,$cd_name,$code_list) {
     $first_i = key(array_slice($array, 0, 1, true));
     $last_i  = key(array_slice($array, -1, 1, true));
     $str = "";
@@ -23,7 +23,9 @@ function list_to_str($table_name,$code_list) {
         $str .= " ";
         $str .= $table_name;
         $str .= " WHERE";
-        $str .= " CD =";
+        $str .= " ";
+        $str .= $cd_name;
+        $str .= " =";
         $str .= " '".$val."'";
         if ($i === $last_i) {
         	// 最後にはつけない

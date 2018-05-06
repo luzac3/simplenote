@@ -173,11 +173,19 @@ if(!empty($_GET["grp_trk_num"])){
                         項目名:<input type="text" class="c_register">　選択形式:
                     <!-- 暫定　本来なら取得する項目 -->
                         <select class="c_register">
-                            <option value = "01">ラジオボタン
-                            <option value = "02">チェックボックス
-                            <option value = "03">セレクトボックス
-                            <option value = "04">フォーム
-                            <option value = "05">テキストエリア
+                            <?php
+                                require_once ("../../common/php/stored.php");
+                                $arg_arr = array(
+                                    "table_name" => "C_INPT_MTHD"
+                                    ,"cd_clmn_name" => "INPT_CD"
+                                );
+
+                                $result = stored("code_load_001",$arg_arr);
+
+                                foreach($result as $val){
+                                    echo "<option value = '".$val["INPT_CD"]."'>".$val["INPT_NAME"];
+                                }
+                            ?>
                         </select>
                     </p>
                 </div>

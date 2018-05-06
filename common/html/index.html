@@ -2,7 +2,7 @@
 session_start();
 if(empty($_SESSION["trk_num"])){
     // 登録番号がなければログインページに飛ばす
-    sheader("Location: login.html");
+    header("Location: login.html");
 }
 ?>
 <!DOCTYPE html>

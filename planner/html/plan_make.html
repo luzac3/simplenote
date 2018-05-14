@@ -171,7 +171,6 @@ if(!empty($_GET["grp_trk_num"])){
                     </p>
                     <p>
                         項目名:<input type="text" class="c_register">　選択形式:
-                    <!-- 暫定　本来なら取得する項目 -->
                         <select class="c_register">
                             <?php
                                 require_once ("../../common/php/stored.php");
@@ -183,8 +182,12 @@ if(!empty($_GET["grp_trk_num"])){
                                 $result = stored("code_load_001",$arg_arr);
 
                                 foreach($result as $val){
-                                    echo "<option value = '".$val["INPT_CD"]."'>".$val["INPT_NAME"];
+                                    // 先にフラグ判断して分岐
+                                    echo "<option value = '".$val["INPT_CD"]."' class='".$val["CHCE_FLG"]."'>".$val["INPT_NAME"];
                                 }
+                                echo "<button type = 'button' class = 'add'>";
+                                // 形式を変更したらボタンを表示する必要がある・・・基本的にテキスト以外は入力させる必要有(フラグで保持)
+                                // ここの項目をリンクさせるテーブルが必要。参加者登録項目テーブル　項目名と企画通番をキーにする
                             ?>
                         </select>
                     </p>

@@ -9,6 +9,7 @@ if($val["ATH_FLG"] || $val["ADMN_CD"] < 2 || $val["PRMSSN_CD"] < 4){
     echo "<a id = '".$val["CNTNT_SRAL_NUM"]."' href ='javascript:void(0)'>".$val["CNTNT_NUM"]."　　　".$val["KUSN_NTJ"]."</a><br>\n";
     // 本来なら企画のページからの移動で、企画者用企画ページは管理権限がないと見られない想定。
 }
+// 参加形態の取得
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,9 +20,74 @@ if($val["ATH_FLG"] || $val["ADMN_CD"] < 2 || $val["PRMSSN_CD"] < 4){
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
 <script type="text/javascript" src="../js//jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="../js/login.js"></script>
+
 <link rel="stylesheet" href="../css/base.css" type="text/css" media="screen">
 <title>予算管理</title>
 </head>
+
 <body>
+<!--
+項目名と予算と枠を設定のうえ、個人にかかる金額か全体か特殊かを選択。
+特殊の場合○人分という設定をできる。これらの合計と参加人数の差分を計算し、合計が参加人数を上回っており、かつ差分が同じ名称の人数の一つより大きい場合
+自動的にその金額を必要経費から引く
+複数ある場合、最も一人当たりの料金が高いものから引いていく
+
+
+形式としては
+・参加形態のチェックボックス・
+予算項目名ボックス　予算　かかる範囲セレクトボックス
+
+ -->
+
+ <form>
+ <table>
+ <tr class="budget_form">
+     <td>
+     <!-- 予算項目名 -->
+     <label class="item">予算項目名</label><input type = "text" class="item">
+     <!-- カテゴリ(タグ) -->
+     <input type = "text" class="category"><label class="category">カテゴリ(タグ検索の際に使用されます)</label>
+     </td>
+     <td>
+     <!-- 参加形態(枠) -->
+     <label class="item">参加枠</label>
+     <select class="item">
+     <?php
+         //取得した枠を表示する(keyはコード値)
+         foreach($waku as $key -> $val){
+         	echo "<option value='".$key."'>".$val."</option>";
+         }
+     ?>
+     </select>
+     <!-- 予算 -->
+     <label class=budget">予算</label><input type = "number" class=""budget>
+     <!-- かかる範囲 -->
+     <label class="range">範囲</label>
+     <option value = "01" class="range">全体</option>
+     <option value = "02" class="range">個人</option>
+     <option value = "03" class="range">特殊</option>
+
+     <!-- 特殊の場合に活性化する人数(何人分の人数か) -->
+     <input type="number" class="extra_num" "disabled">人分<label class="extra_num"></label>
+     </td>
+ </tr>
+ </table>
+ </form>
+
+<div id = "add_form_set">
+<p>項目を追加する</p>
+<select class="add_form">
+<?php
+    for($i=1; $i<=10; $i++){
+        echo "<option value = '".$i."'>".$i."</option>";
+    }
+?>
+</select>
+<label class="add_form">個</label><button type="button" class="add_form" value="add_form">追加</button>
+
+</div>
+
+<button type = "button" value="back">戻る</button>
+<button type = "button" value="register">登録</button>
 </body>
 </html>
